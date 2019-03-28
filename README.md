@@ -13,9 +13,9 @@ QMUL cloud computing mini project
 
 ## **Run API, command line:**
 It will trigger main.py file and start the API
-'''
+```
 python main.py
-'''
+```
 
 
 
