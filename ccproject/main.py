@@ -1,4 +1,6 @@
 """
+This file mainly used for implementing user accounts and access management and hash-based authentication
+It uses flask_login package to remember users and uses Cassandra to save user info.
 reference: https://github.com/maxcountryman/flask-login
 """
 from flask import Flask, url_for, request, redirect, jsonify, json
@@ -8,7 +10,9 @@ from flask import Blueprint
 from passlib.apps import custom_app_context as pwd_context
 from app import app
 
+
 auth_api = Flask(__name__)
+# user blueprint functin to call another file
 auth_api.register_blueprint(app)
 auth_api.secret_key = 'IRENE_SECRET_KEY'
 login_manager = LoginManager(auth_api)
@@ -24,10 +28,12 @@ template_page = """
              </form>
              """
 
+#if want to add more judgement, modify from here
 class User(UserMixin):
-    #if want to add more judgement, modify from here
     pass
 
+
+# When user sign up, this function will be called
 class Create:
     # save username and hashed password into database
     def new_user(self, name, password):
@@ -42,14 +48,15 @@ class Create:
         password_hash = pwd_context.encrypt(password)
         return password_hash
 
+# flask_login save current user id
 @login_manager.user_loader
 def user_loader(email):
-    #let flask_login get current user id
     user = User()
     user.id = email
     return user
 
 
+# log in page
 @auth_api.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_active:
@@ -62,16 +69,17 @@ def login():
                     "<a href='{}newuser'>Sign Up</a>".format(request.url_root)
         return log_in_page
 
-    # retrieve email and password from key-in information
+    log_in_page = "<h2>Log-in</h2>" + template_page.format('login') + \
+                "<a href='{}newuser'>Sign Up</a>".format(request.url_root)
+
     email = request.form['email']
     ori_password = request.form['password']
     rows = session.execute("SELECT password_hash FROM irene.users where username = %s LIMIT 1", ([email]))
     if not rows: # fool-proofing: username not exists
-        # log_in_page = "<a href='{}'>link text</a>".format(request.base_url)
-        return ('<h2>Username:{} does not exist</h2>'.format(email) + log_in_page), 404
+        return ('<h2>Username:{} does not exist</h2>{}'.format(email,log_in_page)), 404
     elif pwd_context.verify(ori_password, rows[0].password_hash)==False:
         # fool-proofing: wrong password
-        return ('<h2>Wrong password. Please Log in again</h2>' + log_in_page), 404
+        return ('<h2>Wrong password. Please Log in again</h2>{}'.format(log_in_page)), 404
     else:
         user = User()
         user.id = email # id as email
@@ -88,17 +96,17 @@ def login():
     return 'Bad login',404
 
 
-
+# log out and remove log-in status
 @auth_api.route('/logout')
 def logout():
-    # delete user log in information
     logout_user()
     return 'Logged out'
 
 
-# Add new user
+# Add new user name and password to Cassandra DB
 @auth_api.route('/newuser', methods=['GET', 'POST'])
 def new_user():
+    # Polish Sign up page
     sign_up_page = "<h2>Sign-up</h2>" + template_page.format('newuser') + \
                     "<a href='{}login'>Log in</a>".format(request.url_root)
     if request.method == 'GET':
