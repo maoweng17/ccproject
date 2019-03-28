@@ -11,7 +11,7 @@ QMUL cloud computing mini project
 
 
 
-##**Run API, command line:**
+## **Run API, command line:**
 It will trigger main.py file and start the API
 '''
 python main.py
@@ -19,6 +19,6 @@ python main.py
 
 
 
-##**Status Description:**
+## **Status Description:**
 Log in and log out actions will affect which page user can access
 ![alt text](/status.png)
