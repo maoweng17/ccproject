@@ -16,4 +16,4 @@ python main.py
 
 Status Description:
 Log in and log out actions will affect which page user can access
-![alt text](ccproject/status.png)
+![alt text](./ccproject/status.png)
