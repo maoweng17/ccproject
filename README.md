@@ -2,16 +2,16 @@
 QMUL cloud computing mini project
 
 
-
-*It's a REST-based service interface.
-*Use external REST service to retrieve data from Zomato API.
-*Use Cassandra database for accessing persistent information: user information (username and hashed password) and rating information.
-*Implemented cloud security measures including: hash-based authentication, user accounts and access management.
-
-
+## **Overall Description**
+1. It's a REST-based service interface.
+2. Use external REST service to retrieve data from Zomato API.
+3. Use Cassandra database for accessing persistent information: user information (username and hashed password) and rating information.
+4. Implemented cloud security measures including: hash-based authentication, user accounts and access management.
 
 
-**Run API, command line:**
+
+
+##**Run API, command line:**
 It will trigger main.py file and start the API
 '''
 python main.py
@@ -19,6 +19,6 @@ python main.py
 
 
 
-**Status Description:**
+##**Status Description:**
 Log in and log out actions will affect which page user can access
 ![alt text](/status.png)
