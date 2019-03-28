@@ -8,12 +8,12 @@ QMUL cloud computing mini project
 4. Implemented cloud security measures including: hash-based authentication, user accounts and access management.
 
 
-Run API, command line:
+#Run API, command line:
 It will trigger main.py file and start the API
 '''
 python main.py
 '''
 
-Status Description:
+#Status Description:
 Log in and log out actions will affect which page user can access
-![alt text](./ccproject/status.png)
+![alt text](/status.png)
