@@ -22,3 +22,4 @@ python main.py
 ## **Status Description:**
 Log in and log out actions will affect which page user can access
 ![alt text](/status.png)
+ 
