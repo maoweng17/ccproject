@@ -12,6 +12,14 @@ QMUL cloud computing mini project
 
 
 ## **Run API, command line:**
+If you want to run it on Google cloud platform, you can execute the following command.
+After this, you will have the external IP
+```
+sh cmd_all.sh
+kubectl get services
+```
+
+If you want to run it on local machine, you can directly execure this command.
 It will trigger main.py file and start the API
 ```
 python main.py
