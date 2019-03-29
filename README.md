@@ -16,6 +16,7 @@ If you want to run it on Google cloud platform, you can execute the following co
 After this, you will have the external IP
 ```
 sh cmd_all.sh
+sh cmd_all2.sh
 kubectl get services
 ```
 
