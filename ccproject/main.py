@@ -17,7 +17,7 @@ auth_api.register_blueprint(app)
 auth_api.secret_key = 'IRENE_SECRET_KEY'
 login_manager = LoginManager(auth_api)
 
-cluster = Cluster()
+cluster = Cluster(['cassandra'])
 session = cluster.connect()
 
 template_page = """
