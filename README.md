@@ -12,11 +12,36 @@ QMUL cloud computing mini project
 
 
 ## **Run API, command line:**
-If you want to run it on Google cloud platform, you can execute the following command.
+If you want to run it on Google cloud platform,
+you can execute the following command.
 After this, you will have the external IP
 ```
-sh cmd_all.sh
-sh cmd_all2.sh
+gcloud config set compute/zone europe-west2-b
+export PROJECT_ID=“$(gcloud config get-value project -q)”
+
+# 3 node clusters
+gcloud container clusters create cassandra —num-nodes=3 --machine-type "n1-standard-2"
+
+kubectl create -f cassandra-peer-service.yml
+kubectl create -f cassandra-service.yml
+kubectl create -f cassandra-replication-controller.yml
+
+kubectl get pods -l name=cassandra
+# scale up our number of nodes
+kubectl scale rc cassandra --replicas=3
+
+kubectl exec -it cassandra-96b5t -- nodetool status
+# kubectl exec -it cassandra-2nlrk cqlsh
+
+docker build -t gcr.io/${PROJECT_ID}/irene:v1 .
+docker push gcr.io/${PROJECT_ID}/irene:v1
+
+kubectl run irene --image=gcr.io/${PROJECT_ID}/irene:v1 --port 8080
+kubectl expose deployment irene --type=LoadBalancer --port 80 --target-port 8080
+
+kubectl get services
+
+kubectl describe pod irene3-654cdbf8-cgwmv
 kubectl get services
 ```
 
