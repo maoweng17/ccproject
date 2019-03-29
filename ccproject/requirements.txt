@@ -1,0 +1,6 @@
+pip
+Flask
+cassandra-driver  --install-option="--no-cython"
+passlib
+flask-login
+requests

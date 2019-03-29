@@ -53,9 +53,9 @@ def result(url):
 @app.route('/')
 @app.route('/home')
 def home():
-    columnNames = ['path','Description','log-in required?']
-    des = [['/nearbyres/{lat}/{lon}','key in latitude and longtitude and get nearby restaurant','Yes'],
-            ['/rat/<res>/<int:rate>','Rate on this system','Yes'],
+    columnNames = ['path','Description','require log-in?']
+    des = [['/nearbyres/{float:lat}/{float:lon}','key in latitude and longtitude and get nearby restaurant','Yes'],
+            ['/rat/{res}/{int:rate}','Rate on this system','Yes'],
             ['/login', 'log in system','No'],
             ['/logout', 'log out system','No'],
             ['/newuser', 'create new account','No'],
@@ -65,29 +65,34 @@ def home():
 
 
 # Get Nearby restaurant by entering latitude and longtitude
-@app.route('/nearbyres/<lat>/<lon>', methods=["GET"])
+@app.route('/nearbyres/<float:lat>/<float:lon>', methods=["GET"])
 @login_required
 def render_dashboard(lat,lon):
     url_root = request.url_root
     temp = geocode(lat,lon) # trigger function to get dictionary
     columnNames = ['','name','rating','address'] # Static Column Names
-    return render_template('result.html', url_root=url_root,records=temp, colnames=columnNames), 201
+    return render_template('nearby.html', url_root=url_root,records=temp, colnames=columnNames), 200
 
 
 # fake POST function, insert information to database
+# user can give rating for restaurant
 @app.route('/rat/<res>/<rate>', methods=["GET"])
 @login_required
 def rate_restaurant(res,rate):
+    # fool-proofing: rating is not an integer
     if not rate.isdigit():
-        return '<h2>rating: must be an integer!</h2>', 201
+        return '<h2>rating: must be an integer!</h2>', 400
+    # fool-proofing: rating value out of bound
     elif int(rate)>5 or int(rate)<0 :
-        return '<h2>rating: only intergers between 0~5 are available!</h2>', 201
+        return '<h2>rating: only intergers between 0~5 are available!</h2>', 400
     else:
+        # sucess: insert data into database
         insert_cql = """INSERT INTO irene.restaurant_rating (username, res_name, created_time, rating) VALUES
                      ('{}','{}', toUnixTimestamp(now()),{});""".format(current_user.id,res,rate)
         session.execute(insert_cql)
-        return '<h2>Tanks for your feedback</h2>', 201
-
+        # return '<title>Give rating Successfully</title><h2>Tanks for your feedback</h2>', 201
+        return render_template('result.html', title='Give rating Successfully',
+                                h2='Tanks for your feedback',root=request.url_root), 201
 
 # retrieve data from Cassandra DB to check whether rating info. be stored
 # just for reviewing ( for demo convenience)

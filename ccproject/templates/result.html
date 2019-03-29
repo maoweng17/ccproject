@@ -1,46 +1,8 @@
+<title>{{ title }}</title>
 <html>
-<head>
-<style>
-  table {
-    border-collapse: collapse;
-    layout:auto;
-  }
 
-  th, td {
-    padding: 8px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-  }
-
-  tr:hover {background-color:#f5f5f5;}
-</style>
-</head>
 <body>
-
-<table>
-    <thead>
-        <tr>
-            {% for col in colnames %}
-            <th>{{ col }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for record in records %}
-        <tr>
-            {% for col in ['image'] %}
-            <td>
-              <a href="{{ record[col][1] }}" target="_blank"><img src= "{{ record[col][0] }}" >
-              </a>
-            </td>
-            {% endfor %}
-            {% for col in ['name','rating','address'] %}
-            <td>{{ record[col] }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+  <h2>{{ h2 }}</h2>
+  <a href='{{ root }}home'>Home</a>
 </body>
 </html>
