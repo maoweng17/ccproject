@@ -8,7 +8,7 @@ import requests
 from cassandra.cluster import Cluster
 
 app = Blueprint('app', __name__)
-cluster = Cluster()
+cluster = Cluster(['cassandra'])
 session = cluster.connect()
 
 """ =============================== Function ============================== """
