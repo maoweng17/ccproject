@@ -16,5 +16,5 @@ kubectl exec -it ${CASSANDRA_ID} -- nodetool status
 docker build -t gcr.io/${PROJECT_ID}/irene:v1 .
 docker push gcr.io/${PROJECT_ID}/irene:v1
 
-kubectl run service_name --image=gcr.io/${PROJECT_ID}/irene:v1 --port 8080
-kubectl expose deployment service_name --type=LoadBalancer --port 80 --target-port 8080
+kubectl run service-name --image=gcr.io/${PROJECT_ID}/irene:v1 --port 8080
+kubectl expose deployment service-name --type=LoadBalancer --port 80 --target-port 8080
